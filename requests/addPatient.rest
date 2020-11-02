@@ -1,0 +1,10 @@
+POST http://localhost:3001/api/patients
+Content-Type: application/json
+
+{
+  "name": "Sergio Madrigal",
+  "dateOfBirth": "04-07-1984",
+  "ssn": "24398756-004",
+  "gender": "male",
+  "occupation": "engineer" 
+}
