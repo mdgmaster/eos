@@ -8,6 +8,16 @@ router.get('/', (_req, res)=> {
   res.send(patientService.getPatients());
 });
 
+router.get('/:id', (req, res) => {
+  try {
+  const patient = patientService.getPatient(req.params.id);
+  res.json(patient);
+  }catch(e){
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    res.status(400).send(e.message);
+}
+});
+
 router.post('/', (req,res)=>{
   try{
     const newPatient = toNewPatient(req.body);
@@ -15,6 +25,7 @@ router.post('/', (req,res)=>{
     res.json(addedPatient);
 
   }catch(e){
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     res.status(400).send(e.message);
   }
 

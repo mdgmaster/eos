@@ -9,6 +9,7 @@ const getPatients = (): Array<PatientNossn> => {
 
 const addPatient = (patient: NewPatient): Patient => {
   const newPatient = {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
     id: String(uuidv4()),
     ...patient
   };
@@ -16,7 +17,16 @@ const addPatient = (patient: NewPatient): Patient => {
   return newPatient;
 };
 
+const getPatient = (id: string): Patient => {
+    const patient = patients.find(patient => patient.id === id);
+  if (!patient) {
+    throw new Error('No patient found for this id');
+  }
+  return patient;
+};
+
 export default {
   getPatients,
-  addPatient
+  addPatient,
+  getPatient
 };

@@ -1,4 +1,4 @@
-import { NewPatient, Gender } from './types';
+import { NewPatient, Gender, Entry } from './types';
 
 const toNewPatient = (object: any): NewPatient => {
   return {
@@ -6,31 +6,46 @@ const toNewPatient = (object: any): NewPatient => {
     dateOfBirth: parseDate(object.dateOfBirth),
     ssn: parseSsn(object.ssn),
     gender: parseGender(object.gender),
-    occupation: parseOccupation(object.occupation)
+    occupation: parseOccupation(object.occupation),
+    entries: parseEntries(object.entries)
   };
 };
 
+const parseEntries = (entries: any): Entry[] => {
+  if(!entries || !isEntry(entries)) {
+    throw new Error('Incorrect or missing type: ' + entries);
+  }
+  return entries;
+};
+
+const isEntry = (param: any): param is Entry[] => {
+  return param as Entry[] !== undefined; 
+};
+ 
 
 const parseName = (name: any): string => {
   if(!name || !isString(name) ) {
+    // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
     throw new Error('Incorrect or missing name: '+ name);
   }
   return name;
-}
+};
 
 const parseSsn = (ssn : any): string => {
   if(!ssn || !isString(ssn)) {
+    // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
     throw new Error('Incorrect or missing name: '+ ssn);
   }
   return ssn;
-}
+};
 
 const parseOccupation = (occupation: any): string => {
   if (!occupation || !isString(occupation)) {
+    // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
     throw new Error('Incorrect or missing occupation: '+occupation);
   }
   return occupation;
-}
+};
 
 const isString = (text:any): text is string => {
   return typeof text === 'string' || text instanceof String;
