@@ -1,6 +1,6 @@
-import { NewPatient, Gender, Entry } from './types';
+import { NewPatient, NewEntry, Gender, Entry, } from './types';
 
-const toNewPatient = (object: any): NewPatient => {
+export const toNewPatient = (object: any): NewPatient => {
   return {
     name: parseName(object.name),
     dateOfBirth: parseDate(object.dateOfBirth),
@@ -11,8 +11,39 @@ const toNewPatient = (object: any): NewPatient => {
   };
 };
 
+export const toNewEntry = (object: any): NewEntry => {
+      return{ 
+        ...object,
+        description: parseString(object.description, "description"),
+        date: parseDate(object.date),
+        type: parseString(object.type, "type"),
+        specialist: parseString(object.specialist, "specialist"),
+        diagnosisCodes: object.diagnosisCodes ? parseDiagnosis(object.diagnosisCodes) : undefined,
+      };
+  };
+
+
+const parseDiagnosis = (value: any): string[] => {
+  if(!value || !isDiagnose(value)){
+    throw new Error('Incorrect or missing type: '+ value);
+  }
+  return value;
+};
+
+const isDiagnose = (param: any): param is string[] => {
+  return param as string[] !== undefined; 
+}
+
+const parseString = (value: any, param: string): string => {
+  if(!value || !isString(value)){
+    throw new Error('Incorrect or missing '+ param);
+  }
+  return value;
+}
+
 const parseEntries = (entries: any): Entry[] => {
   if(!entries || !isEntry(entries)) {
+    // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
     throw new Error('Incorrect or missing type: ' + entries);
   }
   return entries;
@@ -21,7 +52,6 @@ const parseEntries = (entries: any): Entry[] => {
 const isEntry = (param: any): param is Entry[] => {
   return param as Entry[] !== undefined; 
 };
- 
 
 const parseName = (name: any): string => {
   if(!name || !isString(name) ) {
@@ -58,6 +88,7 @@ const isDate = (date: string): boolean => {
 
 const parseDate = (date: any): string => {
   if(!date || !isString(date) || !isDate(date)) {
+    // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
     throw new Error('Incorrect or missing date: ' + date);
   }
   return date;
@@ -65,6 +96,7 @@ const parseDate = (date: any): string => {
 
 const parseGender = (gender: any): Gender => {
   if (!gender || !isGender(gender)) {
+    // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
     throw new Error('Incorrect or missing gender: '+ gender);
   }
   return gender;
@@ -74,4 +106,3 @@ const isGender = (param: any): param is Gender => {
   return Object.values(Gender).includes(param);
 };
 
-export default toNewPatient;
